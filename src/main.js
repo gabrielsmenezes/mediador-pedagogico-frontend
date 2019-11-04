@@ -27,7 +27,7 @@ Vue.use(VeeValidate);
 
 
 Vue.use(VueResource);
-Vue.http.options.root =  'http://mediador-pedagogico.herokuapp.com';
+Vue.http.options.root =  'https://mediador-pedagogico.herokuapp.com';
 //Vue.url.options.root = 'http://10.6.97.145:8080';
 //this.$http.options.root =  'http://10.6.97.145:8080';
 Vue.use(VueRouter);
