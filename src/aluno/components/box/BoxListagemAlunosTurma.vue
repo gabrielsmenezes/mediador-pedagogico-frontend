@@ -6,7 +6,7 @@
     <v-container mt-1 mr-5>
       <v-layout row>
         <v-flex md12>
-          <h1>Listagem de Alunos</h1>
+          <h1>Listagem de Alunos - Turma: {{this.turma.nome}}</h1>
         </v-flex>
         <v-flex md1>
           <dialog-ajuda />
@@ -64,11 +64,13 @@ export default {
   props: ["idTurma"],
 
   mounted() {
-    this.$session.destroy();
+    this.turma = this.$session.get("turmaAlunos");
+    this.$session.remove("turmaAlunos");
   },
 
   data: () => ({
     loading: true,
+    turma:'',
     turma_id: "",
     aluno: [],
     headers: [
@@ -80,7 +82,7 @@ export default {
   methods: {
     pegaIdTurma(idTurma) {
       this.turma_id = idTurma;
-      this.$http.get("turmas/" + this.turma_id + "/alunos").then(
+      this.$http.get("turmas/" + this.turma_id + "/alunos",{ headers: {'Authorization': this.$session.get("token")}}).then(
         resposta => {
           this.aluno = resposta.body;
           this.loading = false;
@@ -94,7 +96,7 @@ export default {
 
     deleteItem(id) {
       if (confirm("Tem certeza que deseja deletar ?")) {
-        this.$http.delete("alunos/" + id).then(
+        this.$http.delete("alunos/" + id,{ headers: {'Authorization': this.$session.get("token")}}).then(
           () => {
             window.location.href =
               "/listagemAlunosTurma/?idAlert=deletarSuccess&idTurma=" +

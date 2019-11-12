@@ -75,7 +75,7 @@ export default {
     },
 
     loadData() {
-      this.$http.get("calendario").then(
+      this.$http.get("calendario",{ headers: {'Authorization': this.$session.get("token")}}).then(
         resposta => {
           if ((this.calendario = "")) {
             this.cadastrar = true;
@@ -96,19 +96,19 @@ export default {
         if (!valid) {
           alert("Preencha os campos corretamente!");
         } else {
-          this.$http.put("calendario", this.calendario).then(
+          this.$http.put("calendario", this.calendario,{ headers: {'Authorization': this.$session.get("token")}}).then(
             () => {
-              window.location.href = "/?idAlert=calendarioSuccess";
+            //  window.location.href = "/?idAlert=calendarioSuccess";
 
-              /* this.$router.push({
+               this.$router.push({
                 name: "home",
-                query: { idAlert: "success" }
-              }); */
+                query: { idAlert: "calendarioSuccess" }
+              }); 
             },
             err => {
               console.error(err);
-              window.location.href = "/?idAlert=calendarioError";
-              /*this.$router.push({ name: "home", query: { idAlert: "calendarioError" } })*/
+             // window.location.href = "/?idAlert=calendarioError";
+              this.$router.push({ name: "home", query: { idAlert: "calendarioError" } })
             }
           );
         }

@@ -1,7 +1,7 @@
 export default class Usuario{
 
 constructor(usuario = ""){
-this.email = usuario.email;
+this.username = usuario.username;
 this.senha = usuario.senha;
 
 }

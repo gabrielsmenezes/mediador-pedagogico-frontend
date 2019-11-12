@@ -97,9 +97,10 @@ export default {
   },
 
   created() {
-    if (this.$session.exists()) {
+    if (this.$session.has("noticiaEditar")) {
       console.log(this.$session.get("noticiaEditar"));
       this.noticia = this.$session.get("noticiaEditar");
+      this.$session.remove("noticiaEditar");
     }
   },
 
@@ -109,10 +110,10 @@ export default {
         if (!valid) {
           alert("Preencha os campos corretamente!");
         } else {
-          if (this.$session.exists()) {
-            this.$http.put("noticias/" + this.noticia.id, this.noticia).then(
+          if (this.noticia.id) {
+            this.$http.put("noticias/" + this.noticia.id, this.noticia,{ headers: {'Authorization': this.$session.get("token")}}).then(
               () => {
-                this.$session.destroy();
+                
 
               //  window.location.href = "/?idAlert=noticiaSuccess";
 
@@ -123,7 +124,7 @@ export default {
               },
               err => {
                 console.error(err);
-                this.$session.destroy();
+                
                // window.location.href = "/?idAlert=noticiaError";
 
                  this.$router.push({
@@ -136,7 +137,7 @@ export default {
           } else {
             //console.log(this.$http.options.root);
             console.log(this.noticia);
-            this.$http.post("noticias", this.noticia).then(
+            this.$http.post("noticias", this.noticia,{ headers: {'Authorization': this.$session.get("token")}}).then(
               () => {
               //  window.location.href = "/?idAlert=noticiaSuccess";
 

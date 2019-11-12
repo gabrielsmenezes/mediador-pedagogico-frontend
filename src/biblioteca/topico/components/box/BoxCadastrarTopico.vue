@@ -63,9 +63,10 @@ export default {
   mounted() {
     this.$validator.localize("pt", new Dictionary());
 
-    if (this.$session.exists()) {
+    if (this.$session.has("topicoEditar")) {
       console.log(this.$session.get("topicoEditar"));
       this.topico = this.$session.get("topicoEditar");
+      this.$session.remove("topicoEditar");
     }
   },
 
@@ -77,8 +78,8 @@ export default {
         } else {
           //console.log(this.$http.options.root);
 
-          if (this.$session.exists()) {
-            this.$http.put("topicos/" + this.topico.id, this.topico).then(
+          if (this.topico.id) {
+            this.$http.put("topicos/" + this.topico.id, this.topico,{ headers: {'Authorization': this.$session.get("token")}}).then(
               () => {
                // window.location.href = "/?idAlert=topicoSuccess";
                 this.$router.push({
@@ -95,7 +96,7 @@ export default {
               }
             );
           } else {
-            this.$http.post("topicos", this.topico).then(
+            this.$http.post("topicos", this.topico,{ headers: {'Authorization': this.$session.get("token")}}).then(
               () => {
                // window.location.href = "/?idAlert=topicoSuccess";
                 this.$router.push({

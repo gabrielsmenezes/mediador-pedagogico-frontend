@@ -31,7 +31,8 @@ import LoginUsuario from '@/usuario/view/LoginUsuario.vue';
 
 
 export const routes = [
-  { path: '/?:idAlert', name: 'home', component: Home },
+  { path: '/home', name: 'home', component: Home },
+  { path: '/home/?:idAlert', name: 'home', component: Home },
 
   { path: '/cadastrarAviso', name: 'cadastrarAviso', component: CadastrarAviso },
 
@@ -86,7 +87,7 @@ export const routes = [
   { path: '/cadastrarItem', name: 'cadastrarItem', component: CadastrarItem },
   { path: '/cadastrarItem/?:idTopico', name: 'cadastrarItem', component: CadastrarItem },
 
-  { path: '/login', name: 'login', component: LoginUsuario },
+  { path: '/', name: 'login', component: LoginUsuario },
 
   { path: '*', name: 'others', component: Home },
 ];

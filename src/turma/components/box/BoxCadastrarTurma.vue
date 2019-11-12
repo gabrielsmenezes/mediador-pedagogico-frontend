@@ -76,9 +76,10 @@ export default {
   mounted() {
     this.$validator.localize("pt", new Dictionary());
 
-    if (this.$session.exists()) {
+    if (this.$session.has("turmaEditar")) {
       console.log(this.$session.get("turmaEditar"));
       this.turma = this.$session.get("turmaEditar");
+      this.$session.remove("turmaEditar");
     }
   },
 
@@ -90,8 +91,8 @@ export default {
         } else {
           //console.log(this.$http.options.root);
 
-          if (this.$session.exists()) {
-            this.$http.put("turmas/" + this.turma.id, this.turma).then(
+          if (this.turma.id) {
+            this.$http.put("turmas/" + this.turma.id, this.turma,{ headers: {'Authorization': this.$session.get("token")}}).then(
               () => {
                // window.location.href = "/?idAlert=turmaSuccess";
                this.$router.push({
@@ -108,7 +109,7 @@ export default {
               }
             );
           } else {
-            this.$http.post("turmas", this.turma).then(
+            this.$http.post("turmas", this.turma,{ headers: {'Authorization': this.$session.get("token")}}).then(
               () => {
                // window.location.href = "/?idAlert=turmaSuccess";
                 this.$router.push({
@@ -120,7 +121,7 @@ export default {
                // window.location.href = "/?idAlert=turmaError";
                 this.$router.push({
                 name: "listagemTurma",
-                query: { idAlert: "cadastrarSuccess" }
+                query: { idAlert: "cadastrarError" }
               }); 
               }
             );

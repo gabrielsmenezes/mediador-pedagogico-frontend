@@ -15,7 +15,7 @@
         </router-link>
       </v-flex>
       <v-layout row>
-        <v-flex md8>
+        <v-flex md12>
           <v-layout d-flex mt-4>
             <v-flex md10 class="white lighten-2">
               <v-form class="ml-4">
@@ -78,9 +78,9 @@ export default {
   },
 
   mounted() {
-    this.$session.destroy();
+    
 
-    this.$http.get("professores").then(
+    this.$http.get("professores",{ headers: {'Authorization': this.$session.get("token")}}).then(
       resposta => {
         this.professores = resposta.body;
         this.loading = false;
@@ -111,7 +111,7 @@ export default {
 
     deleteItem(id) {
       if (confirm("Tem certeza que deseja deletar ?")) {
-        this.$http.delete("professores/" + id).then(
+        this.$http.delete("professores/" + id,{ headers: {'Authorization': this.$session.get("token")}}).then(
           () => {
             window.location.href =
               "/listagemProfessores/?idAlert=deletarSuccess";

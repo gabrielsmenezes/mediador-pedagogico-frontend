@@ -97,7 +97,7 @@ export default {
     },
 
     loadData() {
-      this.$http.get("bullying").then(
+      this.$http.get("bullying",{ headers: {'Authorization': this.$session.get("token")}}).then(
         resposta => {
           
           if ((this.bullying = "")) {
@@ -152,19 +152,19 @@ export default {
             .getElementById("base64")
             .src.substr(22);
           console.log(this.bullying);
-            this.$http.put("bullying" , this.bullying).then(
+            this.$http.put("bullying" , this.bullying,{ headers: {'Authorization': this.$session.get("token")}}).then(
               () => {
-                window.location.href = "/?idAlert=bullyingSuccess";
+               // window.location.href = "/?idAlert=bullyingSuccess";
 
-                /* this.$router.push({
+                 this.$router.push({
                 name: "home",
-                query: { idAlert: "success" }
-              }); */
+                query: { idAlert: "bullyingSuccess" }
+              }); 
               },
               err => {
                 console.error(err);
-                 window.location.href = "/?idAlert=bullyingError";
-                /*this.$router.push({ name: "home", query: { idAlert: "bullyingError" } })*/
+                // window.location.href = "/?idAlert=bullyingError";
+                this.$router.push({ name: "home", query: { idAlert: "bullyingError" } })
               }
             );
         }

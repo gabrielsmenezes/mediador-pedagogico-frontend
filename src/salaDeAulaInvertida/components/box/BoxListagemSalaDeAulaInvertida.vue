@@ -3,7 +3,7 @@
     <v-container mt-1 mr-5>
       <v-layout row>
         <v-flex md12>
-          <h1>Listagem de Materiais de Sala de Aula Invertida</h1>
+          <h1>Listagem de Materiais de Sala de Aula Invertida - Turma: {{this.turma.nome}}</h1>
         </v-flex>
         <v-flex md1>
           <dialog-ajuda />
@@ -15,7 +15,7 @@
         </router-link>
       </v-flex>
       <v-layout row>
-        <v-flex md8>
+        <v-flex md12>
           <v-layout d-flex mt-4>
             <v-flex md10 class="white lighten-2">
               <v-form class="ml-4">
@@ -77,6 +77,7 @@ export default {
   data: () => ({
     loading: true,
     salaDeAulaInvertida: [],
+    turma: '',
     turma_id: "",
     headers: [
       { text: "Titulo", value: "titulo" },
@@ -86,13 +87,16 @@ export default {
   }),
 
   mounted() {
-    this.$session.destroy();
+    this.turma = this.$session.get("turmaMaterial");
+    console.log(this.turma);
+    
   },
 
   methods: {
     pegaIdTurma(idTurma) {
+      if(!this.turma_id){
       this.turma_id = idTurma;
-      this.$http.get("aulas/todos/?idDaTurma=" + this.turma_id).then(
+      this.$http.get("aulas/todos/?idDaTurma=" + this.turma_id,{ headers: {'Authorization': this.$session.get("token")}}).then(
         resposta => {
           this.salaDeAulaInvertida = resposta.body;
           this.loading = false;
@@ -104,6 +108,7 @@ export default {
           );
         }
       );
+      }
     },
 
     editarItem(salaDeAulaInvertidaEditar) {
@@ -114,7 +119,7 @@ export default {
 
     deleteItem(id) {
       if (confirm("Tem certeza que deseja deletar ?")) {
-        this.$http.delete("aulas/" + id).then(
+        this.$http.delete("aulas/" + id,{ headers: {'Authorization': this.$session.get("token")}}).then(
           () => {
             window.location.href =
               "/listagemSalaDeAulaInvertida/?idAlert=deletarSuccess&idTurma=" +

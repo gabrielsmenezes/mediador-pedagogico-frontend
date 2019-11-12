@@ -3,8 +3,8 @@ export default class Dictionary {
     constructor() {
         return {
             custom: {
-                email:{
-                    required: () => "O campo Email não pode ser vazio",
+                username:{
+                    required: () => "O campo Nome de Usuário não pode ser vazio",
                    
                 },
 

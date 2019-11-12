@@ -17,6 +17,14 @@ export default {
     return {
       //
     }
+  },
+
+  mounted(){
+    if(!this.$session.get("token")){
+this.$router.push({
+                name: "login"
+              });
+    }
   }
 }
 </script>

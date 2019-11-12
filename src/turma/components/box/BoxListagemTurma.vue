@@ -15,9 +15,10 @@
         </router-link>
       </v-flex>
       <v-layout row>
-        <v-flex md10>
+        <v-flex md12>
           <v-layout d-flex mt-4>
             <v-flex md10 class="white lighten-2">
+              <p>Todas as turmas cadastradas durante o ano serão excluídas juntamente com seus respectivos alunos e materiais de sala de aula invertida no dia (25/12).</p>
               <v-form class="ml-4">
                 <v-data-table :headers="headers" :items="turma" class="elevation-1" no-data-text="Não há nenhuma Turma Cadastrada" :loading="this.loading">
                   <template v-slot:items="props">
@@ -58,7 +59,7 @@
                             <template v-slot:activator="{ on }">
                               <v-icon
                                 small
-                                @click="listagemSalaDeAulaInvertida(props.item.id)"
+                                @click="listagemSalaDeAulaInvertida(props.item)"
                                 v-on="on"
                               >list</v-icon>
                             </template>
@@ -68,7 +69,7 @@
                         <v-btn icon>
                           <v-tooltip bottom>
                             <template v-slot:activator="{ on }">
-                              <v-icon small @click="listagemAlunos(props.item.id)" v-on="on">school</v-icon>
+                              <v-icon small @click="listagemAlunos(props.item)" v-on="on">school</v-icon>
                             </template>
                             <span>Listar Alunos</span>
                           </v-tooltip>
@@ -99,9 +100,8 @@ export default {
   },
 
   mounted() {
-    this.$session.destroy();
-
-    this.$http.get("turmas/todas").then(
+    
+    this.$http.get("turmas/todas",{ headers: {'Authorization': this.$session.get("token")}}).then(
       resposta => {
         this.turma = resposta.body;
         this.loading = false;
@@ -132,7 +132,7 @@ export default {
 
     deleteItem(id) {
       if (confirm("Tem certeza que deseja deletar ?")) {
-        this.$http.delete("turmas/" + id).then(
+        this.$http.delete("turmas/" + id,{ headers: {'Authorization': this.$session.get("token")}}).then(
           () => {
             window.location.href = "/listagemTurma/?idAlert=deletarSuccess";
           },
@@ -149,12 +149,17 @@ export default {
         "/cadastrarSalaDeAulaInvertida/?idTurma=" + idTurma;
     },
 
-    listagemSalaDeAulaInvertida(idTurma) {
-      window.location.href = "/listagemSalaDeAulaInvertida/?idTurma=" + idTurma;
+    listagemSalaDeAulaInvertida(turma) {
+      this.$session.start();
+      this.$session.set("turmaMaterial", turma);
+      window.location.href = "/listagemSalaDeAulaInvertida/?idTurma=" + turma.id;
     },
 
-    listagemAlunos(idTurma) {
-      window.location.href = "/listagemAlunosTurma/?idTurma=" + idTurma;
+    listagemAlunos(turma) {
+      this.$session.start();
+      this.$session.set("turmaAlunos", turma);
+      window.location.href = "/listagemAlunosTurma/?idTurma=" + turma.id;
+
     }
   }
 };

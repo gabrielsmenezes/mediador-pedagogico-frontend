@@ -41,7 +41,17 @@ export default {
   },
 
   created() {
-    this.$session.destroy();
+    this.$session.remove("itemEditar");
+    this.$session.remove("topicoEditar");
+    this.$session.remove("aavisoEditar");
+    this.$session.remove("noticiaEditar");
+    this.$session.remove("itemEditar");
+    this.$session.remove("turmaMaterial");
+    this.$session.remove("turmaEditar");
+    this.$session.remove("turmaAlunos");
+    this.$session.remove("professoresEditar");
+    this.$session.remove("salaDeAulaInvertidaEditar");
+
   },
   data: () => ({
     icons: [

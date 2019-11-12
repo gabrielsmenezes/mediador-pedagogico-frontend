@@ -68,9 +68,7 @@ export default {
   },
 
   mounted() {
-    this.$session.destroy();
-
-    this.$http.get("noticias/todas").then(
+    this.$http.get("noticias/todas",{ headers: {'Authorization': this.$session.get("token")}}).then(
       resposta => {
         this.noticia = resposta.body;
         this.loading = false;
@@ -101,7 +99,7 @@ export default {
 
     deleteItem(id) {
       if (confirm("Tem certeza que deseja deletar ?")) {
-        this.$http.delete("noticias/" + id).then(
+        this.$http.delete("noticias/" + id,{ headers: {'Authorization': this.$session.get("token")}}).then(
           () => {
             window.location.href = "/listagemNoticia/?idAlert=deletarSuccess";
           },

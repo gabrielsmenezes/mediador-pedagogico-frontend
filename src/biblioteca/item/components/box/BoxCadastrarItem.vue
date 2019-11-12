@@ -13,7 +13,7 @@
         </v-flex>
       </v-layout>
       <v-layout row>
-        <v-flex md8>
+        <v-flex md10>
           <v-layout d-flex mt-4>
             <v-flex md8 class="white lighten-2">
               <v-form class="ml-4">
@@ -81,9 +81,10 @@ export default {
   },
 
   created() {
-    if (this.$session.exists()) {
+    if (this.$session.has("itemEditar")) {
       console.log(this.$session.get("itemEditar"));
       this.item = this.$session.get("itemEditar");
+      this.$session.remove("itemEditar");
     }
   },
 
@@ -99,10 +100,10 @@ export default {
         if (!valid) {
           alert("Preencha os campos corretamente!");
         } else {
-          if (this.$session.exists()) {
-            this.$http.put("itens/" + this.item.id, this.item).then(
+          if (this.item.id) {
+            this.$http.put("itens/" + this.item.id, this.item,{ headers: {'Authorization': this.$session.get("token")}}).then(
               () => {
-                this.$session.destroy();
+                
 
                // window.location.href = "/?idAlert=itemSuccess";
 
@@ -113,7 +114,7 @@ export default {
               },
               err => {
                 console.error(err);
-                this.$session.destroy();
+                
                // window.location.href = "/?idAlert=itemError";
                 this.$router.push({
                 name: "listagemItem",
@@ -124,7 +125,7 @@ export default {
           } else {
             //console.log(this.$http.options.root);
             console.log(this.item);
-            this.$http.post("itens", this.item).then(
+            this.$http.post("itens", this.item,{ headers: {'Authorization': this.$session.get("token")}}).then(
               () => {
                 //window.location.href = "/?idAlert=itemSuccess";
                 this.$router.push({

@@ -57,7 +57,7 @@
                         <v-btn icon>
                           <v-tooltip bottom>
                             <template v-slot:activator="{ on }">
-                              <v-icon small @click="listagemItem(props.item.id)" v-on="on">list</v-icon>
+                              <v-icon small @click="listagemItem(props.item)" v-on="on">list</v-icon>
                             </template>
                             <span>Listar Itens do Tópico</span>
                           </v-tooltip>
@@ -87,9 +87,7 @@ export default {
   },
 
   mounted() {
-    this.$session.destroy();
-
-    this.$http.get("topicos/").then(
+    this.$http.get("topicos/",{ headers: {'Authorization': this.$session.get("token")}}).then(
       resposta => {
         this.topico = resposta.body;
         this.loading = false;
@@ -119,7 +117,7 @@ export default {
 
     deleteItem(id) {
       if (confirm("Tem certeza que deseja deletar ?")) {
-        this.$http.delete("topicos/" + id).then(
+        this.$http.delete("topicos/" + id,{ headers: {'Authorization': this.$session.get("token")}}).then(
           () => {
             window.location.href = "/listagemTopico/?idAlert=deletarSuccess";
           },
@@ -135,8 +133,10 @@ export default {
       window.location.href = "/cadastrarItem/?idTopico=" + idTopico;
     },
 
-    listagemItem(idTopico) {
-      window.location.href = "/listagemItem/?idTopico=" + idTopico;
+    listagemItem(topico) {
+      this.$session.start();
+      this.$session.set("topicoItem", topico);
+      window.location.href = "/listagemItem/?idTopico=" + topico.id;
     }
   }
 };

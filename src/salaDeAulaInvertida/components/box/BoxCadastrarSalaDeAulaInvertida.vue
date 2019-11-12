@@ -45,20 +45,20 @@
                     :editor-toolbar="customToolbar"
                   ></vue-editor>
 
-                  <h1 class="input">Nome</h1>
+                  <h1 class="input mt-3">Nome do Link</h1>
                   <v-text-field name="nome" background-color="white" v-model="links.nome"></v-text-field>
-                  <h1 class="input">Link</h1>
+                  <h1 class="input">Url do Link</h1>
                   <v-text-field name="link" background-color="white" v-model="links.link"></v-text-field>
 
                   <v-btn dark @click="adicionaCampo()">Adicionar Link</v-btn>
 
-                  <v-flex class="grey">
+                  <v-flex class="grey mt-2">
                     <h2 class="ml-2">Links Adicionados</h2>
                     <v-flex v-for="(link,n) in this.salaDeAulaInvertida.links" :key="n">
                       <v-layout row>
                         <v-flex>
-                          <h3 class="ml-3">Nome : {{link.nome}}</h3>
-                          <h3 class="ml-3">Link : {{link.link}}</h3>
+                          <h3 class="ml-3">Nome do Link : {{link.nome}}</h3>
+                          <h3 class="ml-3">Url do Link : {{link.link}}</h3>
                         </v-flex>
                         <v-flex>
                           <v-btn icon>
@@ -129,9 +129,10 @@ export default {
   },
 
   created() {
-    if (this.$session.exists()) {
+    if (this.$session.has("salaDeAulaInvertidaEditar")) {
       console.log(this.$session.get("salaDeAulaInvertidaEditar"));
       this.salaDeAulaInvertida = this.$session.get("salaDeAulaInvertidaEditar");
+      this.$session.remove("salaDeAulaInvertidaEditar");
       // $("#base64").attr("src", "data:image/png;base64," +this.salaDeAulaInvertida.imagem);
       this.imagemUploadUrl =
         "data:image/png;base64," + this.salaDeAulaInvertida.imagem;
@@ -194,7 +195,7 @@ export default {
             .getElementById("base64")
             .src.substr(22);
 
-          if (this.$session.exists()) {
+          if (this.salaDeAulaInvertida.id) {
             this.$http
               .put(
                 "aulas/" + this.salaDeAulaInvertida.id,
@@ -202,7 +203,7 @@ export default {
               )
               .then(
                 () => {
-                  this.$session.destroy();
+                  
 
                  // window.location.href = "/?idAlert=salaDeAulaInvertidaSuccess";
 
@@ -213,7 +214,7 @@ export default {
                 },
                 err => {
                   console.error(err);
-                  this.$session.destroy();
+                  
                  // window.location.href = "/?idAlert=salaDeAulaInvertidaError";
                   this.$router.push({
                 name: "listagemSalaDeAulaInvertida",
@@ -224,7 +225,7 @@ export default {
           } else {
             //console.log(this.$http.options.root);
             console.log(this.salaDeAulaInvertida);
-            this.$http.post("aulas", this.salaDeAulaInvertida).then(
+            this.$http.post("aulas", this.salaDeAulaInvertida,{ headers: {'Authorization': this.$session.get("token")}}).then(
               () => {
                // window.location.href = "/?idAlert=salaDeAulaInvertidaSuccess";
                 this.$router.push({

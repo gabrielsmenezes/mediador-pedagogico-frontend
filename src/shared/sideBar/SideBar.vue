@@ -44,12 +44,12 @@
         <v-spacer></v-spacer>
         <v-layout row wrap justify-end>
           <v-flex md2>
-            <p class="subtitle-1">Admin_Name</p>
+            <p class="subtitle-1">Admin</p>
           </v-flex>
           <v-flex md1>
-            <router-link :to="{name:'home'}">
-              <a>Sair</a>
-            </router-link>
+            
+              <a @click="logout()">Sair</a>
+            
           </v-flex>
         </v-layout>
       </v-toolbar>
@@ -61,6 +61,15 @@ import Imagem from "@/shared/image/img.vue";
 export default {
   components: {
     imagem: Imagem
+  },
+
+  methods: {
+      logout(){
+        this.$session.destroy();
+         this.$router.push({
+                name: "login",
+              });
+      }
   },
 
   data: () => ({

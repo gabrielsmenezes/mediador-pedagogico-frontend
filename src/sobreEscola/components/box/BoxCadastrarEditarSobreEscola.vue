@@ -106,7 +106,7 @@ export default {
     },
 
     loadData() {
-      this.$http.get("escola").then(
+      this.$http.get("escola",{ headers: {'Authorization': this.$session.get("token")}}).then(
         resposta => {
           if ((this.sobreEscola = "")) {
             this.cadastrar = true;
@@ -157,19 +157,19 @@ export default {
             .getElementById("base64")
             .src.substr(22);
 
-          this.$http.put("escola", this.sobreEscola).then(
+          this.$http.put("escola", this.sobreEscola,{ headers: {'Authorization': this.$session.get("token")}}).then(
             () => {
-              window.location.href = "/?idAlert=sobreEscolaSuccess";
+             // window.location.href = "/?idAlert=sobreEscolaSuccess";
 
-              /* this.$router.push({
+               this.$router.push({
                 name: "home",
-                query: { idAlert: "success" }
-              }); */
+                query: { idAlert: "sobreEscolaSuccess" }
+              }); 
             },
             err => {
               console.error(err);
-              window.location.href = "/?idAlert=sobreEscolaError";
-              /*this.$router.push({ name: "home", query: { idAlert: "sobreEscolaError" } })*/
+             // window.location.href = "/?idAlert=sobreEscolaError";
+              this.$router.push({ name: "home", query: { idAlert: "sobreEscolaError" } })
             }
           );
         }

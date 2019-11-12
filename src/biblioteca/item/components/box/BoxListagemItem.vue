@@ -3,7 +3,7 @@
     <v-container mt-1 mr-5>
       <v-layout row>
         <v-flex md12>
-          <h1>Listagem de Itens</h1>
+          <h1>Listagem de Itens - Tópico: {{this.topico.nome}}</h1>
         </v-flex>
         <v-flex md1>
           <dialog-ajuda />
@@ -15,7 +15,7 @@
         </router-link>
       </v-flex>
       <v-layout row>
-        <v-flex md8>
+        <v-flex md12>
           <v-layout d-flex mt-4>
             <v-flex md10 class="white lighten-2">
               <v-form class="ml-4">
@@ -77,6 +77,7 @@ export default {
   data: () => ({
     loading: true,
     item: [],
+    topico: '',
     topico_id: "",
     headers: [
       { text: "Nome", value: "nome" },
@@ -86,13 +87,14 @@ export default {
   }),
 
   mounted() {
-    this.$session.destroy();
+    this.topico = this.$session.get("topicoItem");
+    this.$session.remove("topicoItem");
   },
 
   methods: {
     pegaIdTopico(idTopico) {
       this.topico_id = idTopico;
-      this.$http.get("itens/todos/?idDoTopico=" + this.topico_id).then(
+      this.$http.get("itens/todos/?idDoTopico=" + this.topico_id,{ headers: {'Authorization': this.$session.get("token")}}).then(
         resposta => {
           this.item = resposta.body;
           this.loading = false;
@@ -112,7 +114,7 @@ export default {
 
     deleteItem(id) {
       if (confirm("Tem certeza que deseja deletar ?")) {
-        this.$http.delete("itens/" + id).then(
+        this.$http.delete("itens/" + id,{ headers: {'Authorization': this.$session.get("token")}}).then(
           () => {
             window.location.href =
               "/listagemItem/?idAlert=deletarSuccess&idTopico=" + this.topico_id;

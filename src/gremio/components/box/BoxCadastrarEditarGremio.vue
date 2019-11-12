@@ -96,7 +96,7 @@ export default {
     },
 
     loadData() {
-      this.$http.get("gremio").then(
+      this.$http.get("gremio",{ headers: {'Authorization': this.$session.get("token")}}).then(
         resposta => {
           if ((this.gremio = "")) {
             this.cadastrar = true;
@@ -146,19 +146,19 @@ export default {
           //renderizando imagem
           this.gremio.imagem = document.getElementById("base64").src.substr(22);
 
-          this.$http.put("gremio", this.gremio).then(
+          this.$http.put("gremio", this.gremio,{ headers: {'Authorization': this.$session.get("token")}}).then(
             () => {
-              window.location.href = "/?idAlert=gremioSuccess";
+             // window.location.href = "/?idAlert=gremioSuccess";
 
-              /* this.$router.push({
+               this.$router.push({
                 name: "home",
-                query: { idAlert: "success" }
-              }); */
+                query: { idAlert: "gremioSuccess" }
+              }); 
             },
             err => {
               console.error(err);
-              window.location.href = "/?idAlert=gremioError";
-              /*this.$router.push({ name: "home", query: { idAlert: "gremioError" } })*/
+             // window.location.href = "/?idAlert=gremioError";
+              this.$router.push({ name: "home", query: { idAlert: "gremioError" } })
             }
           );
         }

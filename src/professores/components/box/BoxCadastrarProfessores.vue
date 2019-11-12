@@ -108,9 +108,10 @@ export default {
   },
 
   created() {
-    if (this.$session.exists()) {
+    if (this.$session.has("professoresEditar")) {
       console.log(this.$session.get("professoresEditar"));
       this.professores = this.$session.get("professoresEditar");
+      this.$session.remove("professoresEditar");
     }
   },
 
@@ -133,9 +134,9 @@ export default {
         if (!valid) {
           alert("Preencha os campos corretamente!");
         } else {
-          this.$http.post("professores", this.professores).then(
+          this.$http.post("professores", this.professores,{ headers: {'Authorization': this.$session.get("token")}}).then(
             () => {
-              this.$session.destroy();
+              
 
               // window.location.href = "/?idAlert=professoresSuccess";
 
@@ -146,7 +147,7 @@ export default {
             },
             err => {
               console.error(err);
-              this.$session.destroy();
+              
               // window.location.href = "/?idAlert=professoresError";
               /*  this.$router.push({
                 name: "listagemProfessores",

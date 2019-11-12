@@ -15,7 +15,7 @@
         </router-link>
       </v-flex>
       <v-layout row>
-        <v-flex md8>
+        <v-flex md10>
           <v-layout d-flex mt-4>
             <v-flex md10 class="white lighten-2">
               <v-form class="ml-4">
@@ -72,9 +72,7 @@ export default {
   },
 
   mounted() {
-    this.$session.destroy();
-
-    this.$http.get("avisos/todos").then(
+    this.$http.get("avisos/todos",{ headers: {'Authorization': this.$session.get("token")}}).then(
       resposta => {
         this.aviso = resposta.body;
         this.loading = false;
@@ -110,7 +108,7 @@ export default {
 
     deleteItem(id) {
       if (confirm("Tem certeza que deseja deletar ?")) {
-        this.$http.delete("avisos/" + id).then(
+        this.$http.delete("avisos/" + id,{ headers: {'Authorization': this.$session.get("token")}}).then(
           () => {
             window.location.href = "/listagemAviso/?idAlert=deletarSuccess";
            /*  this.$router.push({
