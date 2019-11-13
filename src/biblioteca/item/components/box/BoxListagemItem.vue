@@ -9,11 +9,19 @@
           <dialog-ajuda />
         </v-flex>
       </v-layout>
+      <v-layout row>
       <v-flex>
         <router-link :to="{path:'/cadastrarItem/?idTopico='+this.idTopico}">
           <v-btn color="black" dark>Novo Item</v-btn>
         </router-link>
       </v-flex>
+      <v-spacer></v-spacer>
+      <v-flex>
+        <router-link :to="{name: 'listagemTopico'}">
+          <v-btn color="black" dark>Voltar</v-btn>
+        </router-link>
+      </v-flex>
+      </v-layout>
       <v-layout row>
         <v-flex md12>
           <v-layout d-flex mt-4>
@@ -88,7 +96,7 @@ export default {
 
   mounted() {
     this.topico = this.$session.get("topicoItem");
-    this.$session.remove("topicoItem");
+   //this.$session.remove("topicoItem");
   },
 
   methods: {

@@ -3,9 +3,8 @@ export default class Dictionary {
     constructor() {
         return {
             custom: {
-                linkDoGremio: {
-                    required: () => "O campo Link não pode ser vazio",
-
+                descricao: {
+                    required: () => "O campo Descrição não pode ser vazio",
                 },
 
             }

@@ -87,14 +87,19 @@ export default {
         path: "listagemAviso"
       },
       {
+        text: "Gerenciar Turmas e Sala de Aula Invertida",
+        img: require("@/assets/gerenciamento-de-SAI.jpg"),
+        path: "listagemTurma"
+      },
+      {
         text: "Gerenciar Notícias",
         img: require("@/assets/noticia.png"),
         path: "listagemNoticia"
       },
       {
-        text: "Gerenciar Turmas e Sala de Aula Invertida",
-        img: require("@/assets/gerenciamento-de-SAI.jpg"),
-        path: "listagemTurma"
+        text: "Gerenciar Calendário",
+        img: require("@/assets/calendario.jpg"),
+        path: "cadastrarEditarCalendario"
       },
       {
         text: "Gerenciar Formulário de Bullying",
@@ -107,25 +112,21 @@ export default {
         path: "cadastrarEditarGremio"
       },
       {
+        text: "Gerenciar Biblioteca",
+        img: require("@/assets/biblioteca.png"),
+        path: "listagemTopico"
+      },
+      {
         text: "Gerenciar Sobre a Escola",
         img: require("@/assets/sobre-escola.jpg"),
         path: "cadastrarEditarSobreEscola"
-      },
-      {
-        text: "Gerenciar Calendário",
-        img: require("@/assets/calendario.jpg"),
-        path: "cadastrarEditarCalendario"
       },
       {
         text: "Gerenciar Professores",
         img: require("@/assets/professores.png"),
         path: "listagemProfessores"
       },
-      {
-        text: "Gerenciar Biblioteca",
-        img: require("@/assets/biblioteca.png"),
-        path: "listagemTopico"
-      }
+      
     ]
   })
 };

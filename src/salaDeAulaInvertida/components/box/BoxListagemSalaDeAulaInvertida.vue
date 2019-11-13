@@ -9,11 +9,19 @@
           <dialog-ajuda />
         </v-flex>
       </v-layout>
+      <v-layout row >
       <v-flex>
         <router-link :to="{path:'/cadastrarSalaDeAulaInvertida/?idTurma='+this.idTurma}">
           <v-btn color="black" dark>Novo Material de Sala de Aula Invertida</v-btn>
         </router-link>
       </v-flex>
+      <v-spacer></v-spacer>
+      <v-flex>
+        <router-link :to="{name: 'listagemTurma'}">
+          <v-btn color="black" dark>Voltar</v-btn>
+        </router-link>
+      </v-flex>
+      </v-layout>
       <v-layout row>
         <v-flex md12>
           <v-layout d-flex mt-4>
@@ -88,8 +96,6 @@ export default {
 
   mounted() {
     this.turma = this.$session.get("turmaMaterial");
-    console.log(this.turma);
-    
   },
 
   methods: {

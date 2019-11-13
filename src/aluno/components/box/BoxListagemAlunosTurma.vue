@@ -5,9 +5,15 @@
   >
     <v-container mt-1 mr-5>
       <v-layout row>
-        <v-flex md12>
+        <v-flex md6>
           <h1>Listagem de Alunos - Turma: {{this.turma.nome}}</h1>
         </v-flex>
+        <v-spacer></v-spacer>
+      <v-flex md5>
+        <router-link :to="{name: 'listagemTurma'}">
+          <v-btn color="black" dark>Voltar</v-btn>
+        </router-link>
+      </v-flex>
         <v-flex md1>
           <dialog-ajuda />
         </v-flex>
@@ -65,7 +71,7 @@ export default {
 
   mounted() {
     this.turma = this.$session.get("turmaAlunos");
-    this.$session.remove("turmaAlunos");
+    //this.$session.remove("turmaAlunos");
   },
 
   data: () => ({

@@ -32,7 +32,7 @@
                 </v-flex>
                 <v-flex md12 mt-3>
                   <v-layout row wrap justify-end>
-                    <router-link :to="{path:'/'}">
+                    <router-link :to="{name:'home'}">
                       <v-btn dark>Cancelar</v-btn>
                     </router-link>
 

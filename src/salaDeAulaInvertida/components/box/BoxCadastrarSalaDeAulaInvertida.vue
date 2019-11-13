@@ -76,7 +76,9 @@
                     </v-flex>
                   </v-flex>
                   <v-layout row wrap justify-end>
-                    <router-link :to="{path:'/listagemSalaDeAulaInvertida', query: {idTurma:this.salaDeAulaInvertida.turmaId }}">
+                    <router-link
+                      :to="{path:'/listagemSalaDeAulaInvertida', query: {idTurma:this.salaDeAulaInvertida.turmaId }}"
+                    >
                       <v-btn dark>Cancelar</v-btn>
                     </router-link>
 
@@ -101,6 +103,14 @@
                 :type="'file'"
               />
             </v-flex>Inserir Imagem
+          </v-btn>
+          <v-btn icon>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon small @click="removeImagem()" v-on="on">delete</v-icon>
+              </template>
+              <span>Remover Imagem</span>
+            </v-tooltip>
           </v-btn>
         </v-layout>
       </v-layout>
@@ -140,6 +150,11 @@ export default {
   },
 
   methods: {
+    removeImagem() {
+      this.salaDeAulaInvertida.imagem = "";
+      document.getElementById("base64").src = "";
+    },
+
     deletaLink(n) {
       this.salaDeAulaInvertida.links.splice(n, 1);
     },
@@ -199,48 +214,63 @@ export default {
             this.$http
               .put(
                 "aulas/" + this.salaDeAulaInvertida.id,
-                this.salaDeAulaInvertida
+                this.salaDeAulaInvertida,
+                { headers: { Authorization: this.$session.get("token") } }
               )
               .then(
                 () => {
-                  
+                  // window.location.href = "/?idAlert=salaDeAulaInvertidaSuccess";
 
-                 // window.location.href = "/?idAlert=salaDeAulaInvertidaSuccess";
-
-                 this.$router.push({
-                name: "listagemSalaDeAulaInvertida",
-                query: { idAlert: "cadastrarSuccess", idTurma:this.salaDeAulaInvertida.turmaId }
-              }); 
+                  this.$router.push({
+                    name: "listagemSalaDeAulaInvertida",
+                    query: {
+                      idAlert: "cadastrarSuccess",
+                      idTurma: this.salaDeAulaInvertida.turmaId
+                    }
+                  });
                 },
                 err => {
                   console.error(err);
-                  
-                 // window.location.href = "/?idAlert=salaDeAulaInvertidaError";
+
+                  // window.location.href = "/?idAlert=salaDeAulaInvertidaError";
                   this.$router.push({
-                name: "listagemSalaDeAulaInvertida",
-                query: { idAlert: "cadastrarError", idTurma:this.salaDeAulaInvertida.turmaId  }
-              }); 
+                    name: "listagemSalaDeAulaInvertida",
+                    query: {
+                      idAlert: "cadastrarError",
+                      idTurma: this.salaDeAulaInvertida.turmaId
+                    }
+                  });
                 }
               );
           } else {
             //console.log(this.$http.options.root);
             console.log(this.salaDeAulaInvertida);
-            this.$http.post("aulas", this.salaDeAulaInvertida,{ headers: {'Authorization': this.$session.get("token")}}).then(
-              () => {
-               // window.location.href = "/?idAlert=salaDeAulaInvertidaSuccess";
-                this.$router.push({
-                name: "listagemSalaDeAulaInvertida",
-                query: { idAlert: "cadastrarSuccess", idTurma:this.salaDeAulaInvertida.turmaId  }
-              }); 
-              },
-              () => {
-               // window.location.href = "/?idAlert=salaDeAulaInvertidaError";
-                this.$router.push({
-                name: "listagemSalaDeAulaInvertida",
-                query: { idAlert: "cadastrarError", idTurma:this.salaDeAulaInvertida.turmaId  }
-              }); 
-              }
-            );
+            this.$http
+              .post("aulas", this.salaDeAulaInvertida, {
+                headers: { Authorization: this.$session.get("token") }
+              })
+              .then(
+                () => {
+                  // window.location.href = "/?idAlert=salaDeAulaInvertidaSuccess";
+                  this.$router.push({
+                    name: "listagemSalaDeAulaInvertida",
+                    query: {
+                      idAlert: "cadastrarSuccess",
+                      idTurma: this.salaDeAulaInvertida.turmaId
+                    }
+                  });
+                },
+                () => {
+                  // window.location.href = "/?idAlert=salaDeAulaInvertidaError";
+                  this.$router.push({
+                    name: "listagemSalaDeAulaInvertida",
+                    query: {
+                      idAlert: "cadastrarError",
+                      idTurma: this.salaDeAulaInvertida.turmaId
+                    }
+                  });
+                }
+              );
           }
         }
       });

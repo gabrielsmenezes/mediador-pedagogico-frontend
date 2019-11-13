@@ -37,7 +37,7 @@
                   <vue-editor v-model="bullying.descricao" :editor-toolbar="customToolbar"></vue-editor>
 
                   <v-layout row wrap justify-end>
-                    <router-link :to="{path:'/'}">
+                    <router-link :to="{name:'home'}">
                       <v-btn dark>Cancelar</v-btn>
                     </router-link>
 
@@ -62,6 +62,14 @@
                 :type="'file'"
               />
             </v-flex>Inserir Imagem
+          </v-btn>
+          <v-btn icon>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon small @click="removeImagem()" v-on="on">delete</v-icon>
+              </template>
+              <span>Remover Imagem</span>
+            </v-tooltip>
           </v-btn>
         </v-layout>
       </v-layout>
@@ -92,6 +100,12 @@ export default {
   },
 
   methods: {
+
+    removeImagem(){
+this.bullying.imagem = '';
+document.getElementById("base64").src = '';
+    },
+
     init: function() {
       this.loadData();
     },

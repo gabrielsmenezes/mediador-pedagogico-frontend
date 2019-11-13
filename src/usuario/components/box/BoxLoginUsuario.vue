@@ -41,10 +41,7 @@
                   required
                 ></v-text-field>
                 <v-layout row wrap justify-center>
-                  <router-link :to="{path:'/'}">
-                    <v-btn>Cancelar</v-btn>
-                  </router-link>
-
+                  
                   <v-btn @click="save()">Login</v-btn>
                 </v-layout>
               </v-flex>

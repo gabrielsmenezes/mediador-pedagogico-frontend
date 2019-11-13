@@ -62,15 +62,21 @@ export default {
         hidden: false
       },
       {
+        src: require("@/assets/sai.jpg"),
+        text: "Gerenciar Turmas e Sala de Aula Invertida",
+        path: "listagemTurma",
+        hidden: false
+      },
+      {
         src: require("@/assets/noticias_icon.jpg"),
         text: " Gerenciar Noticias",
         path: "listagemNoticia",
         hidden: false
       },
       {
-        src: require("@/assets/sai.jpg"),
-        text: "Gerenciar Turmas e Sala de Aula Invertida",
-        path: "listagemTurma",
+        src: require("@/assets/calendario_icon.jpg"),
+        text: "Gerenciar Calendário",
+        path: "cadastrarEditarCalendario",
         hidden: false
       },
       {
@@ -86,30 +92,24 @@ export default {
         hidden: false
       },
       {
+        src: require("@/assets/biblioteca.jpeg"),
+        text: "Gerenciar Biblioteca",
+        path: "listagemTopico",
+        hidden: false
+      },
+      {
         src: require("@/assets/sobreEscola.jpg"),
         text: "Gerenciar Sobre a Escola",
         path: "cadastrarEditarSobreEscola",
         hidden: false
       },
       {
-        src: require("@/assets/calendario_icon.jpg"),
-        text: "Gerenciar Calendário",
-        path: "cadastrarEditarCalendario",
-        hidden: false
-      },
-
-      {
         src: require("@/assets/professores.jpg"),
         text: "Gerenciar Professores",
         path: "listagemProfessores",
         hidden: false
       },
-      {
-        src: require("@/assets/biblioteca.jpeg"),
-        text: "Gerenciar Biblioteca",
-        path: "listagemTopico",
-        hidden: false
-      },
+      
     ]
   })
 };

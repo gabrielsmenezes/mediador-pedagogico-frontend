@@ -102,6 +102,14 @@
               />
             </v-flex>Inserir Imagem
           </v-btn>
+          <v-btn icon>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon small @click="removeImagem()" v-on="on">delete</v-icon>
+              </template>
+              <span>Remover Imagem</span>
+            </v-tooltip>
+          </v-btn>
         </v-layout>
       </v-layout>
     </v-container>
@@ -127,7 +135,6 @@ export default {
   },
 
   created() {
-    
     if (this.$session.has("avisoEditar")) {
       this.aviso = this.$session.get("avisoEditar");
       this.$session.remove("avisoEditar");
@@ -137,9 +144,15 @@ export default {
   },
 
   methods: {
+    removeImagem() {
+      this.aviso.imagem = "";
+      document.getElementById("base64").src = "";
+    },
+
     deletaLink(n) {
       this.aviso.links.splice(n, 1);
     },
+
     adicionaCampo() {
       if (this.links.nome != null && this.links.link != null) {
         this.aviso.links.push(this.links);
@@ -184,47 +197,52 @@ export default {
           this.aviso.imagem = document.getElementById("base64").src.substr(22);
 
           if (this.aviso.id) {
-            this.$http.put("avisos/" + this.aviso.id, this.aviso,{ headers: {'Authorization': this.$session.get("token")}}).then(
-              () => {
-                
+            this.$http
+              .put("avisos/" + this.aviso.id, this.aviso, {
+                headers: { Authorization: this.$session.get("token") }
+              })
+              .then(
+                () => {
+                  //  window.location.href = "/?idAlert=avisoSuccess";
 
-              //  window.location.href = "/?idAlert=avisoSuccess";
+                  this.$router.push({
+                    name: "listagemAviso",
+                    query: { idAlert: "cadastrarSuccess" }
+                  });
+                },
+                err => {
+                  console.error(err);
+                  // window.location.href = "/?idAlert=avisoError";
 
-                 this.$router.push({
-                name: "listagemAviso",
-                query: { idAlert: "cadastrarSuccess" }
-              }); 
-              },
-              err => {
-                console.error(err);
-               // window.location.href = "/?idAlert=avisoError";
-
-                 this.$router.push({
-                name: "listagemAviso",
-                query: { idAlert: "cadastrarError" }
-              }); 
-
-              }
-            );
+                  this.$router.push({
+                    name: "listagemAviso",
+                    query: { idAlert: "cadastrarError" }
+                  });
+                }
+              );
           } else {
             //console.log(this.$http.options.root);
             console.log(this.aviso);
-            this.$http.post("avisos", this.aviso,{ headers: {'Authorization': this.$session.get("token")}}).then(
-              () => {
-                //window.location.href = "/?idAlert=avisoSuccess";
+            this.$http
+              .post("avisos", this.aviso, {
+                headers: { Authorization: this.$session.get("token") }
+              })
+              .then(
+                () => {
+                  //window.location.href = "/?idAlert=avisoSuccess";
                   this.$router.push({
-                name: "listagemAviso",
-                query: { idAlert: "cadastrarSuccess" }
-              }); 
-              },
-              () => {
-                //window.location.href = "/?idAlert=avisoError";
-                this.$router.push({
-                name: "listagemAviso",
-                query: { idAlert: "cadastrarError" }
-              }); 
-              }
-            );
+                    name: "listagemAviso",
+                    query: { idAlert: "cadastrarSuccess" }
+                  });
+                },
+                () => {
+                  //window.location.href = "/?idAlert=avisoError";
+                  this.$router.push({
+                    name: "listagemAviso",
+                    query: { idAlert: "cadastrarError" }
+                  });
+                }
+              );
           }
         }
       });

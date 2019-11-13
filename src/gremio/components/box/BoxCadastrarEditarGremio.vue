@@ -21,22 +21,26 @@
                   <h1 class="input">link do Gremio</h1>
                   <v-text-field
                     name="linkDoGremio"
-                    v-validate="'required'"
-                    :error-messages="errors.collect('linkDoGremio')"
-                    data-vv-name="linkDoGremio"
                     background-color="white"
                     v-model="gremio.linkDoGremio"
-                    required
-                    lazy-validation
                   ></v-text-field>
                 </v-flex>
                 <v-flex md12 mt-3>
                   <h1 class="input">Descrição</h1>
 
-                  <vue-editor v-model="gremio.descricao" :editor-toolbar="customToolbar"></vue-editor>
+                  <vue-editor
+                    name="descricao"
+                    v-validate="'required'"
+                    :error-messages="errors.collect('descricao')"
+                    data-vv-name="descricao"
+                    v-model="gremio.descricao"
+                    required
+                    lazy-validation
+                    :editor-toolbar="customToolbar"
+                  ></vue-editor>
 
                   <v-layout row wrap justify-end>
-                    <router-link :to="{path:'/'}">
+                    <router-link :to="{name:'home'}">
                       <v-btn dark>Cancelar</v-btn>
                     </router-link>
 
@@ -61,6 +65,14 @@
                 :type="'file'"
               />
             </v-flex>Inserir Imagem
+          </v-btn>
+          <v-btn icon>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon small @click="removeImagem()" v-on="on">delete</v-icon>
+              </template>
+              <span>Remover Imagem</span>
+            </v-tooltip>
           </v-btn>
         </v-layout>
       </v-layout>
@@ -91,28 +103,37 @@ export default {
   },
 
   methods: {
+    removeImagem() {
+      this.gremio.imagem = "";
+      document.getElementById("base64").src = "";
+    },
+
     init: function() {
       this.loadData();
     },
 
     loadData() {
-      this.$http.get("gremio",{ headers: {'Authorization': this.$session.get("token")}}).then(
-        resposta => {
-          if ((this.gremio = "")) {
+      this.$http
+        .get("gremio", {
+          headers: { Authorization: this.$session.get("token") }
+        })
+        .then(
+          resposta => {
+            if ((this.gremio = "")) {
+              this.cadastrar = true;
+            }
+
+            this.gremio = resposta.body;
+
+            document.getElementById("base64").src =
+              "data:image/png;base64," + resposta.body.imagem;
+          },
+          err => {
+            console.error(err);
             this.cadastrar = true;
+            // window.location.href = "/?idAlert=gremioErrorBusca";
           }
-
-          this.gremio = resposta.body;
-
-          document.getElementById("base64").src =
-            "data:image/png;base64," + resposta.body.imagem;
-        },
-        err => {
-          console.error(err);
-          this.cadastrar = true;
-         // window.location.href = "/?idAlert=gremioErrorBusca";
-        }
-      );
+        );
     },
 
     onFileChange1(e) {
@@ -141,26 +162,33 @@ export default {
     submit() {
       this.$validator.validateAll().then(valid => {
         if (!valid) {
-          alert("Preencha os campos corretamente!");
+          alert("O campo Descrição não pode ser vazio!");
         } else {
           //renderizando imagem
           this.gremio.imagem = document.getElementById("base64").src.substr(22);
 
-          this.$http.put("gremio", this.gremio,{ headers: {'Authorization': this.$session.get("token")}}).then(
-            () => {
-             // window.location.href = "/?idAlert=gremioSuccess";
+          this.$http
+            .put("gremio", this.gremio, {
+              headers: { Authorization: this.$session.get("token") }
+            })
+            .then(
+              () => {
+                // window.location.href = "/?idAlert=gremioSuccess";
 
-               this.$router.push({
-                name: "home",
-                query: { idAlert: "gremioSuccess" }
-              }); 
-            },
-            err => {
-              console.error(err);
-             // window.location.href = "/?idAlert=gremioError";
-              this.$router.push({ name: "home", query: { idAlert: "gremioError" } })
-            }
-          );
+                this.$router.push({
+                  name: "home",
+                  query: { idAlert: "gremioSuccess" }
+                });
+              },
+              err => {
+                console.error(err);
+                // window.location.href = "/?idAlert=gremioError";
+                this.$router.push({
+                  name: "home",
+                  query: { idAlert: "gremioError" }
+                });
+              }
+            );
         }
       });
     }
